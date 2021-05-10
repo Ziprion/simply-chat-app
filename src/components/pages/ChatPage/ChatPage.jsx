@@ -2,6 +2,7 @@ import React from 'react';
 import Header from './Header';
 import Channels from './Channels';
 import Messages from './Messages';
+import ModalAdd from './ModalAdd';
 
 const ChatPage = () => {
   return (
@@ -9,6 +10,7 @@ const ChatPage = () => {
       <Header />
       <Channels />
       <Messages />
+      <ModalAdd />
     </div>
   );
 };

@@ -1,0 +1,30 @@
+.messages-form {
+  form {
+    position: relative;
+    height: 80px;
+    margin: 0 48px;
+    padding: 24px;
+    border-top: 1px solid $semi-dark;
+
+    & input {
+      background: inherit;
+      color: $semi-dark;
+      width: 100%;
+      padding: 8px;
+    }
+
+    & button {
+      position: absolute;
+      top: 20px;
+      right: 0;
+      width: 40px;
+      height: 40px;
+      background-image: url('../../assets/images/icons/cursor.svg');
+      background-color: $semi-dark;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-size: 20px 20px;
+      border-radius: 20px;
+    }
+  }
+}

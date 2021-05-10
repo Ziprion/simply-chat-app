@@ -1,0 +1,23 @@
+.channels-box {
+  padding: 24px;
+
+  .channels-item {
+    & button {
+      padding: 8px 16px;
+      border-radius: 20px;
+      color: $light;
+      text-transform: capitalize;
+    }
+
+    .channel-name {
+      @include bold;
+    }
+  }
+
+  .current-channel {
+    & button {
+      background: $light;
+      color: $semi-dark;
+    }
+  }
+}

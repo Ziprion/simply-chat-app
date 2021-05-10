@@ -60,7 +60,7 @@ const setUpAuth = (app) => {
 };
 
 export default async (options) => {
-  const app = fastify({ logger: { prettyPrint: true } });
+  const app = fastify({ logger: { prettyPrint: false } });
 
   setUpAuth(app);
   setUpViews(app);

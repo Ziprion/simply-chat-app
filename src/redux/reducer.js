@@ -10,6 +10,7 @@ export const slice = createSlice({
     messagesInfo: {
       messages: [],
     },
+    modalInfo: { isOpened: false, type: null, extra: null },
   },
   reducers: {
     setInitialState: (state, { payload }) => {
@@ -18,9 +19,32 @@ export const slice = createSlice({
       state.channelsInfo.currentChannelId = currentChannelId;
       state.messagesInfo.messages = [...messages];
     },
+    switchChannel: (state, { payload }) => {
+      state.channelsInfo.currentChannelId = payload;
+    },
+    addMessage: (state, { payload }) => {
+      state.messagesInfo.messages.push(payload);
+    },
+    addChannel: (state, { payload }) => {
+      state.channelsInfo.channels.push(payload);
+      switchChannel(payload.id);
+    },
+    openModal: (state, { payload }) => {
+      state.modalInfo = { ...payload };
+    },
+    closeModal: (state) => {
+      state.modalInfo = { isOpened: false, type: null, extra: null };
+    },
   },
 });
 
-export const { setInitialState } = slice.actions;
+export const {
+  setInitialState,
+  switchChannel,
+  addMessage,
+  addChannel,
+  openModal,
+  closeModal,
+} = slice.actions;
 
 export default slice.reducer;

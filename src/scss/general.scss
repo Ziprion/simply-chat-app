@@ -20,6 +20,8 @@ button {
   border: none;
   cursor: pointer;
   outline-offset: 5px;
+
+  font-size: inherit;
   font-family: inherit;
 }
 
@@ -42,6 +44,19 @@ input {
 
 @mixin bold {
   font-weight: 700;
+}
+
+@mixin hide-scrollbar {
+  & {
+    overflow-x: hidden;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 }
 
 body {
