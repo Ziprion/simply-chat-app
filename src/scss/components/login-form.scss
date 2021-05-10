@@ -1,0 +1,71 @@
+.login-form {
+  width: 320px;
+  margin: 150px auto 0;
+  text-align: center;
+
+  & label {
+    @include bold;
+    display: block;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  & input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 24px;
+    border-radius: 5px;
+    box-shadow: $box-shadow;
+    background: $light;
+    border: 2px solid $semi-dark;
+
+    &:focus {
+      box-shadow: 0 1px 10px rgba($info, 0.25);
+      border: 2px solid $info;
+    }
+  }
+
+  .is-invalid {
+    border: 1px solid $danger !important;
+  }
+
+  .login-feedback {
+    @include small;
+
+    color: $danger;
+    height: 25px;
+  }
+
+  & button {
+    display: block;
+    width: 60%;
+    background-color: $semi-dark;
+    margin: 0 auto;
+    border: 1px solid $light;
+    border-radius: 5px;
+    color: $light;
+    padding: 12px 24px;
+
+    &:hover,
+    &:active,
+    &:focus {
+      background-color: $light;
+      color: $dark;
+    }
+  }
+
+  p {
+    @include small;
+    margin-top: 24px;
+    text-align: center;
+  }
+
+  a {
+    color: $light;
+    &:hover,
+    &:focus,
+    &:active {
+      text-decoration: underline;
+    }
+  }
+}

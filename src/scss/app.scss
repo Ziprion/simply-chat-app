@@ -1,0 +1,51 @@
+@import './variables.scss';
+@import './general.scss';
+@import './components/index.scss';
+
+.container {
+  position: relative;
+
+  display: grid;
+  grid-template-areas:
+    'header    messages'
+    'channels  messages';
+  grid-template-rows: 70px 1fr;
+  grid-template-columns: 400px 1fr;
+  width: 100%;
+  min-width: 320px;
+  max-width: 1540px;
+  height: 100vh;
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 24px;
+
+  @media screen and (max-width: 991px) {
+    grid-template-areas:
+      'channels'
+      'header';
+    grid-template-rows: 1fr 70px;
+    grid-template-columns: 1fr;
+
+    padding: 0;
+  }
+}
+
+.header {
+  grid-area: header;
+  background: $primary;
+  border-bottom: 1px solid $semi-dark;
+}
+
+.channels {
+  grid-area: channels;
+  background: $primary;
+}
+
+.messages {
+  grid-area: messages;
+  background: $secondary;
+
+  @media screen and (max-width: 991px) {
+    display: none;
+  }
+}
