@@ -7,7 +7,13 @@ import { Provider } from 'react-redux';
 import store from './redux/store.js';
 import { io } from 'socket.io-client';
 import { useDispatch } from 'react-redux';
-import { setInitialState, addMessage } from './redux/reducer.js';
+import {
+  setInitialState,
+  addMessage,
+  addChannel,
+  renameChannel,
+  removeChannel,
+} from './redux/reducer.js';
 import axios from 'axios';
 const socket = io();
 
@@ -28,6 +34,20 @@ const Init = () => {
     socket.on('connect', () => {
       socket.on('newMessage', (msg) => {
         dispatch(addMessage(msg));
+      });
+
+      socket.on('newChannel', (msg) => {
+        dispatch(addChannel(msg));
+      });
+
+      socket.on('renameChannel', (msg) => {
+        console.log(msg);
+        dispatch(renameChannel(msg));
+      });
+
+      socket.on('removeChannel', (msg) => {
+        console.log(msg);
+        dispatch(removeChannel(msg));
       });
     });
 

@@ -38,27 +38,6 @@
   padding: 24px;
 }
 
-.channels {
-  grid-area: channels;
-  background: $primary;
-  border-radius: 0 0 0 20px;
-  padding: 24px;
-
-  .channels-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    & button {
-      color: $light;
-      font-size: 30px;
-    }
-  }
-  h2 {
-    //text-align: center;
-  }
-}
-
 .messages {
   grid-area: messages;
   background: $secondary;
@@ -85,12 +64,12 @@
   background-color: rgba($black, 0.4);
   width: 100%;
   height: 100%;
-  z-index: 2;
+  z-index: 5;
   display: none;
 
   .modal {
     margin: 150px auto 0;
-    z-index: 3;
+    z-index: 10;
     width: 500px;
     height: 250px;
     background: $light;

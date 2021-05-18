@@ -1,36 +1,39 @@
 import React, { useEffect } from 'react';
 import cn from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
-import { closeModal, switchChannel } from '../../../redux/reducer.js';
+import { closeModal } from '../../../redux/reducer.js';
 import { Formik, Form, Field } from 'formik';
-import { setFocus, resetForm } from '../../../utilities';
+import { setFocus, resetForm, getCurrentType } from '../../../utilities';
 import { io } from 'socket.io-client';
 
-const ModalAdd = () => {
+const ModalRename = () => {
   const socket = io();
+  const dispatch = useDispatch();
+  const currentType = getCurrentType();
+  const currentStatus = currentType === 'rename';
+  const currentId = useSelector((state) => state.modalInfo.extra);
+  const currentChannels = useSelector((state) => state.channelsInfo.channels);
+  const currentChannel = currentChannels.filter(
+    (channel) => channel.id === currentId
+  )[0];
 
   useEffect(() => {
-    setFocus('input[name="channel-name"]');
+    setFocus('input[name="channel-rename"]');
 
-    const handleEsc = ({ keyCode }) => {
-      if (keyCode === 27) {
-        resetForm('modal-add');
-        document.removeEventListener('keydown', handleEsc);
-        dispatch(closeModal());
-        setFocus('input[name="body"]');
-      }
-    };
-    const activeModal = document.querySelector('.modal.show');
-    if (activeModal !== null) {
-      document.addEventListener('keydown', handleEsc);
-    }
+    // const handleEsc = ({ keyCode }) => {
+    //   if (keyCode === 27) {
+    //     resetForm('modal-rename');
+    //     document.removeEventListener('keydown', handleEsc);
+    //     dispatch(closeModal());
+    //     setFocus('input[name="body"]');
+    //   }
+    // };
+    // const activeModal = document.querySelector('.modal.show');
+    // if (activeModal !== null) {
+    //   document.addEventListener('keydown', handleEsc);
+    // }
   });
 
-  const dispatch = useDispatch();
-  // const currentStatus = useSelector((state) => state.modalInfo.isOpened);
-  const currentType = useSelector((state) => state.modalInfo.type);
-  const currentStatus = currentType === 'add';
-  const currentChannels = useSelector((state) => state.channelsInfo.channels);
   const validate = (value) => {
     if (!value) {
       return 'Required';
@@ -41,14 +44,13 @@ const ModalAdd = () => {
     const channelsName = currentChannels.map((channel) => channel.name);
     const isSameName = channelsName.includes(value);
     if (isSameName) {
-      return 'Must be unique';
+      return 'Current name';
     }
     return '';
   };
   const handleCloseModal = () => (e) => {
-    console.log(e);
     if (e.target.id === 'modal-wrapper') {
-      resetForm('modal-add');
+      resetForm('modal-rename');
       dispatch(closeModal());
       setFocus('input[name="body"]');
     }
@@ -63,7 +65,6 @@ const ModalAdd = () => {
     modal: true,
     show: currentStatus,
   });
-
   return !currentStatus ? null : (
     <div
       id='modal-wrapper'
@@ -71,26 +72,26 @@ const ModalAdd = () => {
       onClick={handleCloseModal()}
     >
       <div className={modalClasses}>
-        <h3>Добавить чат</h3>
+        <h3>Rename чат</h3>
         <Formik
-          initialValues={{ 'channel-name': '' }}
+          initialValues={{
+            'channel-rename': `${currentChannel.name}`,
+          }}
           validateOnBlur={false}
           onSubmit={async (values, { resetForm, setSubmitting }) => {
             setSubmitting(true);
             const message = {
-              name: values['channel-name'],
+              id: currentId,
+              name: values['channel-rename'],
             };
             try {
-              socket.emit('newChannel', message, ({ data }) => {
-                resetForm();
+              socket.emit('renameChannel', message, () => {
                 dispatch(closeModal());
-                const channels = document.querySelector('.channels');
-                channels.scrollTop = channels.scrollHeight;
-                dispatch(switchChannel(data.id));
+                setFocus('input[name="body"]');
               });
             } catch (e) {
               console.log(e.message);
-              setFocus('input[name="channel-name"]');
+              setFocus('input[name="channel-rename"]');
               throw e;
             } finally {
               setSubmitting(false);
@@ -98,20 +99,20 @@ const ModalAdd = () => {
           }}
         >
           {({ errors, touched, isSubmitting }) => (
-            <Form id='modal-add' noValidate={true}>
+            <Form id='modal-rename' noValidate={true}>
               <Field
-                id='channel-name'
+                id='channel-rename'
                 type='text'
-                name='channel-name'
+                name='channel-rename'
                 validate={validate}
                 readOnly={isSubmitting}
               />
-              {errors['channel-name'] && touched['channel-name']
-                ? `${errors['channel-name']}`
+              {errors['channel-rename'] && touched['channel-rename']
+                ? `${errors['channel-rename']}`
                 : null}
 
               <button type='submit' disabled={isSubmitting}>
-                Добавить
+                Rename
               </button>
               <button type='button' disabled={isSubmitting}>
                 Отменить
@@ -124,4 +125,4 @@ const ModalAdd = () => {
   );
 };
 
-export default ModalAdd;
+export default ModalRename;

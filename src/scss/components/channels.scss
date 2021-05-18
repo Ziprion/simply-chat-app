@@ -1,23 +1,106 @@
-.channels-box {
-  padding: 24px;
+.channels {
+  grid-area: channels;
+  background: $primary;
+  border-radius: 0 0 0 20px;
+  @include hide-scrollbar;
+  padding-bottom: 24px;
 
-  .channels-item {
+  .channels-header {
+    position: sticky;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding: 24px 24px 12px;
+    z-index: 2;
+    background: $primary;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
     & button {
-      padding: 8px 16px;
-      border-radius: 20px;
       color: $light;
-      text-transform: capitalize;
-    }
-
-    .channel-name {
-      @include bold;
+      font-size: 30px;
     }
   }
 
-  .current-channel {
-    & button {
+  .channels-box {
+    margin-bottom: 24px;
+    .channels-item {
+      cursor: pointer;
+      position: relative;
+      width: 100%;
+      padding: 8px 48px;
+
+      & button {
+        color: $light;
+      }
+
+      .channel-name {
+        @include bold;
+      }
+
+      &:hover {
+        background: $semi-dark;
+
+        & button {
+          color: $light;
+        }
+      }
+    }
+
+    .current-channel {
       background: $light;
-      color: $semi-dark;
+
+      & button {
+        color: $semi-dark;
+      }
+
+      &:hover {
+        background: $light;
+
+        & button {
+          color: $semi-dark;
+        }
+        .channel-menu {
+          & button {
+            color: $light;
+          }
+        }
+      }
+    }
+
+    .focus-channel {
+      background: $semi-dark;
+
+      & button {
+        color: $light;
+      }
+    }
+
+    .channel-menu-button {
+      position: absolute;
+      font-size: 24px;
+      top: 6px;
+      right: 24px;
+      padding: 0 6px;
+      outline-offset: 0px;
+      vertical-align: middle;
+    }
+
+    .channel-menu {
+      display: none;
+      position: absolute;
+      background: $semi-dark;
+      color: $light;
+      border-radius: 0 0 10px 10px;
+      padding: 6px 24px;
+      top: 40px;
+      right: 0px;
+      z-index: 3;
+
+      & button {
+        color: $light;
+      }
     }
   }
 }

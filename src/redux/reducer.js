@@ -27,7 +27,19 @@ export const slice = createSlice({
     },
     addChannel: (state, { payload }) => {
       state.channelsInfo.channels.push(payload);
-      switchChannel(payload.id);
+    },
+    renameChannel: (state, { payload }) => {
+      const channels = state.channelsInfo.channels;
+      const currentChannel = channels.filter(
+        (channel) => channel.id === payload.id
+      );
+      currentChannel[0].name = payload.name;
+    },
+    removeChannel: (state, { payload }) => {
+      const channels = state.channelsInfo.channels;
+      state.channelsInfo.channels = channels.filter(
+        (channel) => channel.id !== payload.id
+      );
     },
     openModal: (state, { payload }) => {
       state.modalInfo = { ...payload };
@@ -45,6 +57,8 @@ export const {
   addChannel,
   openModal,
   closeModal,
+  renameChannel,
+  removeChannel,
 } = slice.actions;
 
 export default slice.reducer;

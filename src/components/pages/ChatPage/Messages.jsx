@@ -6,6 +6,9 @@ const Messages = () => {
   useEffect(() => {
     const messagesBox = document.querySelector('.messages-box');
     messagesBox.scrollTop = messagesBox.scrollHeight;
+    // .scrollIntoView({
+    //   behavior: 'smooth'
+    // })
   });
   const currentChannelId = useSelector(
     (state) => state.channelsInfo.currentChannelId

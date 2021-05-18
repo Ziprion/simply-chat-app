@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Header from './Header';
 import Channels from './Channels';
 import Messages from './Messages';
-import ModalAdd from './ModalAdd';
+import Modals from './Modals';
 
 const ChatPage = () => {
   return (
@@ -10,7 +10,7 @@ const ChatPage = () => {
       <Header />
       <Channels />
       <Messages />
-      <ModalAdd />
+      <Modals />
     </div>
   );
 };
