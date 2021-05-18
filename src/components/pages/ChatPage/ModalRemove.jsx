@@ -2,17 +2,19 @@ import React, { useEffect } from 'react';
 import cn from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeModal, switchChannel } from '../../../redux/reducer.js';
-import { setFocus, getCurrentModal } from '../../../utilities';
+import {
+  setFocus,
+  getCurrentModal,
+  getCurrentChannel,
+  getExtraId,
+} from '../../../utilities';
 import { socket } from '../../../socket.js';
 
 const ModalRemove = () => {
   const dispatch = useDispatch();
-  const currentType = getCurrentModal();
-  const currentChannelId = useSelector(
-    (state) => state.channelsInfo.currentChannelId
-  );
-  const currentStatus = currentType === 'remove';
-  const currentId = useSelector((state) => state.modalInfo.extra);
+  const currentStatus = getCurrentModal() === 'remove';
+  const extraId = getExtraId();
+  const currentChannelId = getCurrentChannel();
 
   useEffect(() => {
     setFocus('button[data-role="remove-channel"]');
@@ -20,12 +22,12 @@ const ModalRemove = () => {
 
   const handleRemoveChannel = () => {
     const message = {
-      id: currentId,
+      id: extraId,
     };
     try {
       socket.emit('removeChannel', message, () => {
         dispatch(closeModal());
-        if (currentChannelId === currentId) {
+        if (currentChannelId === extraId) {
           dispatch(switchChannel(1));
         }
         setFocus('input[name="body"]');

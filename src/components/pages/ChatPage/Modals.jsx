@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import ModalAdd from './ModalAdd';
 import ModalRename from './ModalRename';
 import ModalRemove from './ModalRemove';

@@ -14,17 +14,14 @@ export const useAuth = () => {
 function useProvideAuth() {
   const initAuth = localStorage.token ? true : false;
   const [status, changeStatus] = useState(initAuth);
-
-  const signin = (cb) => {
+  const signin = () => {
     changeStatus(true);
-    cb();
   };
 
-  const signout = (cb) => {
+  const signout = () => {
     delete localStorage.token;
     delete localStorage.username;
     changeStatus(false);
-    cb();
   };
 
   return {

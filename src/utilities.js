@@ -1,8 +1,4 @@
-import { useSelector, useDispatch } from 'react-redux';
-
-import { closeModal, switchChannel } from './redux/reducer.js';
-
-// const dispatch = useDispatch();
+import { useSelector } from 'react-redux';
 
 export const setFocus = (element) => {
   document.querySelector(element) === null
@@ -20,3 +16,14 @@ export const getModalStatus = () =>
 
 export const getCurrentModal = () =>
   useSelector((state) => state.modalInfo.type);
+
+export const getExtraId = () => useSelector((state) => state.modalInfo.extra);
+
+export const getChannels = () =>
+  useSelector((state) => state.channelsInfo.channels);
+
+export const getChannelById = (id) =>
+  getChannels().filter((channel) => channel.id === id)[0];
+
+export const getCurrentChannel = () =>
+  useSelector((state) => state.channelsInfo.currentChannelId);

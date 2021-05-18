@@ -6,45 +6,55 @@ import { setFocus } from '../../utilities';
 
 const SingUpPage = () => {
   const auth = useAuth();
-  const errors = {};
+  const error = {};
+
   useEffect(() => {
     setFocus('input[name="username"]');
   });
 
+  const validate = (values) => {
+    const errors = {};
+    if (values.passwordConfirm !== values.password) {
+      errors.passwordConfirm = 'Пароли не совпадают';
+    }
+    return errors;
+  };
+
   return (
     <div className='login-form'>
       <Formik
-        initialValues={{ username: '', password: '' }}
+        initialValues={{ username: '', password: '', passwordConfirm: '' }}
+        validateOnBlur={false}
+        validate={validate}
         onSubmit={async (values, { setSubmitting }) => {
           setSubmitting(true);
           const message = values;
           try {
             const response = await axios({
               method: 'post',
-              url: '/api/v1/login',
+              url: '/api/v1/signup',
               data: message,
               timeout: 4000,
             });
             localStorage.username = response.data.username;
             localStorage.token = response.data.token;
-            //console.log(response.data);
             auth.signin();
           } catch (e) {
-            errors.signin = e.message;
+            errors.signup = e.message;
+            setSubmitting(false);
             setFocus('input[name="username"]');
             throw e;
           }
-          setSubmitting(false);
         }}
       >
-        {({ isSubmitting }) => (
+        {({ errors, touched, isSubmitting }) => (
           <Form>
-            <label htmlFor='username'>Ваш ник</label>
+            <label htmlFor='username'>Имя пользователя</label>
             <Field
               id='username'
               type='text'
               name='username'
-              className={errors.hasOwnProperty('signin') ? 'is-invalid' : ''}
+              className={error.hasOwnProperty('signup') ? 'is-invalid' : ''}
               readOnly={isSubmitting}
               required
             />
@@ -53,21 +63,33 @@ const SingUpPage = () => {
               id='password'
               type='password'
               name='password'
-              className={errors.hasOwnProperty('signin') ? 'is-invalid' : ''}
+              className={error.hasOwnProperty('signup') ? 'is-invalid' : ''}
+              readOnly={isSubmitting}
+              required
+            />
+            <label htmlFor='passwordConfirm'>Подтвердите пароль</label>
+            <Field
+              id='passwordConfirm'
+              type='password'
+              name='passwordConfirm'
+              className={error.hasOwnProperty('signup') ? 'is-invalid' : ''}
               readOnly={isSubmitting}
               required
             />
             <div className='login-feedback'>
-              {errors.signin === 'Request failed with status code 401'
+              {error.signup === 'Request failed with status code 401'
                 ? 'Неверные имя пользователя или пароль'
+                : null}
+              {errors.passwordConfirm && touched.passwordConfirm
+                ? `${errors.passwordConfirm}`
                 : null}
             </div>
             <button type='submit' disabled={isSubmitting}>
-              Войти
+              Зарегистрироваться
             </button>
 
-            <p>Нет аккаунта?</p>
-            <a href='#'>Регистрация</a>
+            <p>Есть аккаунта?</p>
+            <a href='/signin'>Войти</a>
           </Form>
         )}
       </Formik>

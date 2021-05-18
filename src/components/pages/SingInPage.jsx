@@ -7,6 +7,7 @@ import { setFocus } from '../../utilities';
 const SingInPage = () => {
   const auth = useAuth();
   const errors = {};
+
   useEffect(() => {
     setFocus('input[name="username"]');
   });
@@ -27,14 +28,13 @@ const SingInPage = () => {
             });
             localStorage.username = response.data.username;
             localStorage.token = response.data.token;
-            //console.log(response.data);
             auth.signin();
           } catch (e) {
             errors.signin = e.message;
+            setSubmitting(false);
             setFocus('input[name="username"]');
             throw e;
           }
-          setSubmitting(false);
         }}
       >
         {({ isSubmitting }) => (
@@ -67,7 +67,7 @@ const SingInPage = () => {
             </button>
 
             <p>Нет аккаунта?</p>
-            <a href='#'>Регистрация</a>
+            <a href='/signup'>Регистрация</a>
           </Form>
         )}
       </Formik>

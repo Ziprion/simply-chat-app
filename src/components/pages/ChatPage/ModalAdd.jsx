@@ -3,7 +3,7 @@ import cn from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeModal, switchChannel } from '../../../redux/reducer.js';
 import { Formik, Form, Field } from 'formik';
-import { setFocus, resetForm, getCurrentModal } from '../../../utilities';
+import { setFocus, getCurrentModal, getChannels } from '../../../utilities';
 import { socket } from '../../../socket.js';
 
 const ModalAdd = () => {
@@ -12,9 +12,9 @@ const ModalAdd = () => {
   });
 
   const dispatch = useDispatch();
-  const currentType = getCurrentModal();
-  const currentStatus = currentType === 'add';
-  const currentChannels = useSelector((state) => state.channelsInfo.channels);
+  const currentStatus = getCurrentModal() === 'add';
+  const currentChannels = getChannels();
+
   const validate = (value) => {
     if (!value) {
       return 'Required';

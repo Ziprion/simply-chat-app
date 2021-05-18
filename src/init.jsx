@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { useAuth, ProvideAuth } from './components/hooks/useAuth';
 import App from './components/App';
@@ -19,8 +19,8 @@ import axios from 'axios';
 const Init = () => {
   const auth = useAuth();
   const dispatch = useDispatch();
+
   socket.on('connect', () => {
-    console.log('connect!');
     socket
       .on('newMessage', (msg) => {
         dispatch(addMessage(msg));
@@ -36,7 +36,11 @@ const Init = () => {
       });
   });
 
-  if (auth.status) {
+  if (!auth.status) {
+    return <AuthPage />;
+  }
+
+  try {
     axios({
       method: 'get',
       url: '/api/v1/data',
@@ -45,10 +49,12 @@ const Init = () => {
     }).then((response) => {
       dispatch(setInitialState(response.data));
     });
-
-    return <App />;
+  } catch (e) {
+    console.log(e);
+    throw e;
   }
-  return <AuthPage />;
+
+  return <App />;
 };
 
 const runApp = () => {

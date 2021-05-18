@@ -1,20 +1,23 @@
 import React, { useEffect } from 'react';
 import cn from 'classnames';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { closeModal } from '../../../redux/reducer.js';
 import { Formik, Form, Field } from 'formik';
-import { setFocus, resetForm, getCurrentModal } from '../../../utilities';
+import {
+  setFocus,
+  getCurrentModal,
+  getExtraId,
+  getChannels,
+  getChannelById,
+} from '../../../utilities';
 import { socket } from '../../../socket.js';
 
 const ModalRename = () => {
   const dispatch = useDispatch();
-  const currentType = getCurrentModal();
-  const currentStatus = currentType === 'rename';
-  const currentId = useSelector((state) => state.modalInfo.extra);
-  const currentChannels = useSelector((state) => state.channelsInfo.channels);
-  const currentChannel = currentChannels.filter(
-    (channel) => channel.id === currentId
-  )[0];
+  const currentStatus = getCurrentModal() === 'rename';
+  const extraId = getExtraId();
+  const channels = getChannels();
+  const extraChannel = getChannelById(extraId);
 
   useEffect(() => {
     setFocus('input[name="channel-rename"]');
@@ -27,7 +30,7 @@ const ModalRename = () => {
     if (value.length < 3 || value.length > 20) {
       return 'Must be 3 to 20 characters';
     }
-    const channelsName = currentChannels.map((channel) => channel.name);
+    const channelsName = channels.map((channel) => channel.name);
     const isSameName = channelsName.includes(value);
     if (isSameName) {
       return 'Current name';
@@ -45,13 +48,13 @@ const ModalRename = () => {
       <h3>Rename чат</h3>
       <Formik
         initialValues={{
-          'channel-rename': `${currentChannel.name}`,
+          'channel-rename': `${extraChannel.name}`,
         }}
         validateOnBlur={false}
         onSubmit={async (values, { setSubmitting }) => {
           setSubmitting(true);
           const message = {
-            id: currentId,
+            id: extraId,
             name: values['channel-rename'],
           };
           try {
