@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import cn from 'classnames';
 import { useDispatch } from 'react-redux';
 import { closeModal } from '../../../redux/reducer.js';
 import { Formik, Form, Field } from 'formik';
@@ -24,27 +23,25 @@ const ModalRename = () => {
   });
 
   const validate = (value) => {
+    const channelsName = channels.map((channel) => channel.name);
+
     if (!value) {
       return 'Required';
     }
+
     if (value.length < 3 || value.length > 20) {
       return 'Must be 3 to 20 characters';
     }
-    const channelsName = channels.map((channel) => channel.name);
-    const isSameName = channelsName.includes(value);
-    if (isSameName) {
+
+    if (channelsName.includes(value)) {
       return 'Current name';
     }
+
     return '';
   };
 
-  const modalClasses = cn({
-    modal: true,
-    show: currentStatus,
-  });
-
   return !currentStatus ? null : (
-    <div className={modalClasses}>
+    <div className={currentStatus ? 'modal show' : null}>
       <h3>Rename чат</h3>
       <Formik
         initialValues={{
@@ -64,10 +61,9 @@ const ModalRename = () => {
             });
           } catch (e) {
             console.log(e.message);
+            setSubmitting(false);
             setFocus('input[name="channel-rename"]');
             throw e;
-          } finally {
-            setSubmitting(false);
           }
         }}
       >
@@ -83,7 +79,6 @@ const ModalRename = () => {
             {errors['channel-rename'] && touched['channel-rename']
               ? `${errors['channel-rename']}`
               : null}
-
             <button type='submit' disabled={isSubmitting}>
               Rename
             </button>

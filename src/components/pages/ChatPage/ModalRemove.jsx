@@ -14,11 +14,6 @@ const ModalRemove = () => {
   const dispatch = useDispatch();
   const currentStatus = getCurrentModal() === 'remove';
   const extraId = getExtraId();
-  const currentChannelId = getCurrentChannel();
-
-  useEffect(() => {
-    setFocus('button[data-role="remove-channel"]');
-  });
 
   const handleRemoveChannel = () => {
     const message = {
@@ -27,9 +22,6 @@ const ModalRemove = () => {
     try {
       socket.emit('removeChannel', message, () => {
         dispatch(closeModal());
-        if (currentChannelId === extraId) {
-          dispatch(switchChannel(1));
-        }
         setFocus('input[name="body"]');
       });
     } catch (e) {
@@ -37,6 +29,10 @@ const ModalRemove = () => {
       throw e;
     }
   };
+
+  useEffect(() => {
+    setFocus('button[data-role="remove-channel"]');
+  });
 
   const modalClasses = cn({
     modal: true,

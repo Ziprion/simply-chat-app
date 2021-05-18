@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
-import cn from 'classnames';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { closeModal, switchChannel } from '../../../redux/reducer.js';
 import { Formik, Form, Field } from 'formik';
 import { setFocus, getCurrentModal, getChannels } from '../../../utilities';
@@ -13,42 +12,39 @@ const ModalAdd = () => {
 
   const dispatch = useDispatch();
   const currentStatus = getCurrentModal() === 'add';
-  const currentChannels = getChannels();
+  const channels = getChannels();
 
   const validate = (value) => {
+    const channelsName = channels.map((channel) => channel.name);
+
     if (!value) {
       return 'Required';
     }
+
     if (value.length < 3 || value.length > 20) {
       return 'Must be 3 to 20 characters';
     }
-    const channelsName = currentChannels.map((channel) => channel.name);
-    const isSameName = channelsName.includes(value);
-    if (isSameName) {
+
+    if (channelsName.includes(value)) {
       return 'Must be unique';
     }
+
     return '';
   };
 
-  const modalClasses = cn({
-    modal: true,
-    show: currentStatus,
-  });
-
   return !currentStatus ? null : (
-    <div className={modalClasses}>
+    <div className={currentStatus ? 'modal show' : null}>
       <h3>Добавить чат</h3>
       <Formik
         initialValues={{ 'channel-name': '' }}
         validateOnBlur={false}
-        onSubmit={async (values, { resetForm, setSubmitting }) => {
+        onSubmit={async (values, { setSubmitting }) => {
           setSubmitting(true);
           const message = {
             name: values['channel-name'],
           };
           try {
             socket.emit('newChannel', message, ({ data }) => {
-              resetForm();
               dispatch(closeModal());
               const channels = document.querySelector('.channels');
               channels.scrollTop = channels.scrollHeight;
