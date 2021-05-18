@@ -4,11 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { closeModal, switchChannel } from '../../../redux/reducer.js';
 import { Formik, Form, Field } from 'formik';
 import { setFocus, resetForm, getCurrentModal } from '../../../utilities';
-import { io } from 'socket.io-client';
+import { socket } from '../../../socket.js';
 
 const ModalAdd = () => {
-  const socket = io();
-
   useEffect(() => {
     setFocus('input[name="channel-name"]');
   });

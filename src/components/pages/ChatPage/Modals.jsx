@@ -3,7 +3,7 @@ import ModalAdd from './ModalAdd';
 import ModalRename from './ModalRename';
 import ModalRemove from './ModalRemove';
 import { resetForm, setFocus, getModalStatus } from '../../../utilities.js';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import cn from 'classnames';
 import { closeModal } from '../../../redux/reducer';
 

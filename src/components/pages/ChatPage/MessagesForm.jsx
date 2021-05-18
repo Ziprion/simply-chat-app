@@ -4,10 +4,9 @@ import axios from 'axios';
 import routes from '../../../routes.js';
 import { setFocus } from '../../../utilities';
 import { useSelector, useDispatch } from 'react-redux';
-import { io } from 'socket.io-client';
+import { socket } from '../../../socket.js';
 
 const MessagesForm = () => {
-  const socket = io();
   const errors = {};
   const username = localStorage.username;
   const currentChannelId = useSelector(

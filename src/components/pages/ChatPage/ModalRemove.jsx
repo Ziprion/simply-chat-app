@@ -3,10 +3,9 @@ import cn from 'classnames';
 import { useDispatch, useSelector } from 'react-redux';
 import { closeModal, switchChannel } from '../../../redux/reducer.js';
 import { setFocus, getCurrentModal } from '../../../utilities';
-import { io } from 'socket.io-client';
+import { socket } from '../../../socket.js';
 
 const ModalRemove = () => {
-  const socket = io();
   const dispatch = useDispatch();
   const currentType = getCurrentModal();
   const currentChannelId = useSelector(

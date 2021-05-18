@@ -4,10 +4,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { closeModal } from '../../../redux/reducer.js';
 import { Formik, Form, Field } from 'formik';
 import { setFocus, resetForm, getCurrentModal } from '../../../utilities';
-import { io } from 'socket.io-client';
+import { socket } from '../../../socket.js';
 
 const ModalRename = () => {
-  const socket = io();
   const dispatch = useDispatch();
   const currentType = getCurrentModal();
   const currentStatus = currentType === 'rename';
