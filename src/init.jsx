@@ -20,41 +20,40 @@ const socket = io();
 const Init = () => {
   const auth = useAuth();
 
-  if (auth.status) {
-    const dispatch = useDispatch();
-    axios({
-      method: 'get',
-      url: '/api/v1/data',
-      headers: { Authorization: `Bearer ${localStorage.token}` },
-      timeout: 4000,
-    }).then((response) => {
-      dispatch(setInitialState(response.data));
-    });
-
-    socket.on('connect', () => {
-      socket.on('newMessage', (msg) => {
-        dispatch(addMessage(msg));
-      });
-
-      socket.on('newChannel', (msg) => {
-        dispatch(addChannel(msg));
-      });
-
-      socket.on('renameChannel', (msg) => {
-        console.log(msg);
-        dispatch(renameChannel(msg));
-      });
-
-      socket.on('removeChannel', (msg) => {
-        console.log(msg);
-        dispatch(removeChannel(msg));
-      });
-    });
-
-    return <App />;
+  if (!auth.status) {
+    return <AuthPage />;
   }
 
-  return <AuthPage />;
+  const dispatch = useDispatch();
+
+  axios({
+    method: 'get',
+    url: '/api/v1/data',
+    headers: { Authorization: `Bearer ${localStorage.token}` },
+    timeout: 4000,
+  }).then((response) => {
+    dispatch(setInitialState(response.data));
+  });
+
+  socket.on('connect', () => {
+    socket.on('newMessage', (msg) => {
+      dispatch(addMessage(msg));
+    });
+
+    socket.on('newChannel', (msg) => {
+      dispatch(addChannel(msg));
+    });
+
+    socket.on('renameChannel', (msg) => {
+      dispatch(renameChannel(msg));
+    });
+
+    socket.on('removeChannel', (msg) => {
+      dispatch(removeChannel(msg));
+    });
+  });
+
+  return <App />;
 };
 
 const runApp = () => {

@@ -1,5 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 
+import { closeModal, switchChannel } from './redux/reducer.js';
+
 // const dispatch = useDispatch();
 
 export const setFocus = (element) => {
@@ -13,19 +15,8 @@ export const resetForm = (element) => {
     : document.getElementById(element).reset();
 };
 
-export const getCurrentType = () =>
-  useSelector((state) => state.modalInfo.type);
+export const getModalStatus = () =>
+  useSelector((state) => state.modalInfo.isOpened);
 
-export const handleEscKey = () => {
-  const handleEsc = ({ keyCode }) => {
-    if (keyCode === 27) {
-      document.removeEventListener('keydown', handleEsc);
-      useDispatch(closeModal());
-      setFocus('input[name="body"]');
-    }
-  };
-  const activeModal = document.querySelector('.modal.show');
-  if (activeModal !== null) {
-    document.addEventListener('keydown', handleEsc);
-  }
-};
+export const getCurrentModal = () =>
+  useSelector((state) => state.modalInfo.type);
